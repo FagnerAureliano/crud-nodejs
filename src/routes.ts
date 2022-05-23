@@ -34,6 +34,6 @@ routes.get("/users", (req, res) => {
   //     ].join("\n"),
   //   });
   
-    return res.status(201).json({ data: user });
+    return res.status(201);
   });
   
