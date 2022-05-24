@@ -1,39 +1,29 @@
-import express   from 'express';
-import nodemailer from "nodemailer";
-import { prisma } from './prisma';
+import express from "express";
+import { NodemailerMailAdapter } from "./adapters/nodemailer/nodemailer-mail-adapter";
+import { PrismaUserRepository } from "./repositories/prisma/prisma-user-repositoy";
+import { SubmitUserUseCase } from "./use-case/submit-user-use-case";
 
+export const routes = express.Router();
 
-export const routes = express.Router()
+// routes.get("/users", (req, res) => {
+//     return res.send("Hellooo!");
+//   });
 
-const transport = nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
-    auth: {
-      user: "3dce6be17b0ace",
-      pass: "68eeea19d36627",
-    },
+routes.post("/users", async (req, res) => {
+  const { name, username, password } = req.body;
+  
+  const prismaUserRepository = new PrismaUserRepository();
+  const nodemailerMailAdapter = new NodemailerMailAdapter();
+  const submitUserUseCase = new SubmitUserUseCase(
+    prismaUserRepository,
+    nodemailerMailAdapter
+  );
+
+  submitUserUseCase.execute({
+    name,
+    username,
+    password,
   });
 
-routes.get("/users", (req, res) => {
-    return res.send("Hellooo!");
-  });
-  
-  routes.post("/users", async (req, res) => {
-    const { name, username, password } = req.body;
-  
-  
-  
-  //  await transport.sendMail({
-  //     from: "Equipe Finnance App <app@app.com>",
-  //     to: "Teste Mail <teste@teste.com>",
-  //     subject: "Novo feedback",
-  //     html: [
-  //         `<div>`, 
-  //         `<h2>Bem vindo, ${name}!</h2>`, 
-  //         `</div>`
-  //     ].join("\n"),
-  //   });
-  
-    return res.status(201);
-  });
-  
+  return res.status(201).send();
+});
