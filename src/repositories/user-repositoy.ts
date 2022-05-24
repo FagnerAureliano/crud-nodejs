@@ -9,4 +9,5 @@ export interface  UserCreateData {
 
 export interface UserRepository{
     create: (data: UserCreateData) => Promise<void>
+    list: () => Promise<void>
 }

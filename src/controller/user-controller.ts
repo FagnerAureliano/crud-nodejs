@@ -7,7 +7,7 @@ interface SubmitUserUseCaseRequest {
   password: string;
 }
 
-export class SubmitUserUseCase {
+export class UserController {
   constructor(
     private userRepository: UserRepository,
     private mailAdapter: MailAdapter
@@ -21,9 +21,9 @@ export class SubmitUserUseCase {
       username,
       password,
     });
-    await this.mailAdapter.sendMail({
-      subject: "Novo email",
-      body: [`<div>`, `<h2>Bem vindo, ${name}!</h2>`, `</div>`].join("\n"),
-    });
+    // await this.mailAdapter.sendMail({
+    //   subject: "Novo email",
+    //   body: [`<div>`, `<h2>Bem vindo, ${name}!</h2>`, `</div>`].join("\n"),
+    // });
   }
 }

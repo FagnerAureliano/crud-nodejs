@@ -1,7 +1,8 @@
 import express from "express";
-import { NodemailerMailAdapter } from "./adapters/nodemailer/nodemailer-mail-adapter";
-import { PrismaUserRepository } from "./repositories/prisma/prisma-user-repositoy";
-import { SubmitUserUseCase } from "./use-case/submit-user-use-case";
+import { NodemailerMailAdapter } from "../adapters/nodemailer/nodemailer-mail-adapter";
+import { UserController } from "../controller/user-controller";
+import { PrismaUserRepository } from "../repositories/prisma/prisma-user-repositoy";
+
 
 export const routes = express.Router();
 
@@ -14,7 +15,8 @@ routes.post("/users", async (req, res) => {
   
   const prismaUserRepository = new PrismaUserRepository();
   const nodemailerMailAdapter = new NodemailerMailAdapter();
-  const submitUserUseCase = new SubmitUserUseCase(
+
+  const submitUserUseCase = new UserController(
     prismaUserRepository,
     nodemailerMailAdapter
   );
@@ -24,6 +26,5 @@ routes.post("/users", async (req, res) => {
     username,
     password,
   });
-
   return res.status(201).send();
 });
